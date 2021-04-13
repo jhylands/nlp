@@ -4,7 +4,9 @@ from wordlexer import WordLexer
 
 
 def plot(t):
-    if isinstance(t, Token):
+    if isinstance(t, str):
+        return t
+    elif isinstance(t, Token):
         return str(t)
     elif t.data=="_ambig":
         return "({self}\n{children})".format(self=t.data, children="\n".join([plot(c) for c in t.children]))
@@ -30,3 +32,15 @@ QUESTIONMARK: "?"
 %import .ambiguous_word (determiner, noun, verb, pronoun, conjunction, adjective, adverb, preposition)
 '''
 p = Lark(collision_grammar, parser='earley', ambiguity="explicit", lexer=WordLexer, import_paths=["."], debug=True)
+
+simple_grammar = '''
+start: sentence
+sentence: np vp obj
+pp: preposition+ np
+np: determiner? noun
+vp: verb+
+obj: np | verb | pp
+%ignore " "
+%import .ambiguous_word (determiner, noun, verb, preposition)
+'''
+simple_p = Lark(simple_grammar, parser='earley', ambiguity="explicit", lexer=WordLexer, import_paths=["."], debug=True)

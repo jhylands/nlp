@@ -26,6 +26,24 @@ class WordLexer(Lexer):
             with open(path.join(worddir, word_type + ".txt"), "w") as f:
                 f.write("\n".join(self.dictionary[word_type]))
 
+    def lexword(self, word):
+        word = word.lower()
+        token = ""
+        for word_type in WORDTYPES:
+            if word in self.dictionary[word_type]:
+                token += word_type.upper()
+
+        if token == "":
+            if self.expand_vocab:
+                print(", ".join(WORDTYPES))
+                print("I don't know: ", word)
+                word_type = input()
+                self.dictionary[word_type].add(word)
+            else:
+                raise Exception("Unknown word: %s"%word)
+        else:
+            return Token("ambiguous_word__" + token, word)
+
     def lex(self, phrase):
         if phrase[-1] in ".!?":
             terminal = phrase[-1]
@@ -34,24 +52,12 @@ class WordLexer(Lexer):
             terminal = "."
         sentence = phrase.split(" ")
         for word in sentence:
-            word = word.lower()
-            token = ""
-            for word_type in WORDTYPES:
-                if word in self.dictionary[word_type]:
-                    token += word_type.upper()
-
-            if token == "":
-                if self.expand_vocab:
-                    print(", ".join(WORDTYPES))
-                    print("I don't know: ", word)
-                    word_type = input()
-                    self.dictionary[word_type].add(word)
-                else:
-                    raise Exception("Unknown word: %s"%word)
-            else:
-                yield Token("ambiguous_word__" + token, word)
+            yield self.lexword(word)
         if terminal == "?":
             yield Token("QUESTIONMARK", "?")
             
         self.save()
 
+if __name__=="__main__":
+    import sys
+    print(WordLexer().lexword(sys.argv[1]).__repr__())
