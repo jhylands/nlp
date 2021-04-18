@@ -50,6 +50,10 @@ class WordLexer(Lexer):
             phrase = phrase[:-1]
         else:
             terminal = "."
+        if "`" in phrase:
+            raise Exception("Unimplemented quote based noun phrases")
+            
+        
         sentence = phrase.split(" ")
         for word in sentence:
             yield self.lexword(word)

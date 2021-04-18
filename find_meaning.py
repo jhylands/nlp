@@ -1,7 +1,8 @@
 from lark import Tree
+from lark.visitors import CollapseAmbiguities
 import sys
 from wordlexer import WordLexer, Token
-from parser import plot, simple_p
+from parser import plot, p
 from typing import Tuple, List
 from itertools import zip_longest
 
@@ -81,7 +82,31 @@ def extract_nested_verbs(vp: Tree)->Tuple[List[Token], Tree]:
     else:
         return [], vp
 
+def replace_node_verb(t):
+    if isinstance(t, Token):
+        return
+    for index, child in enumerate(t.children):
+        if isinstance(child, Token):
+            return
+        if child.data=="vp" and len(child.children)==1 and child.children[0].data=="verb":
+            # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
+            t.children[index] = child.children[0]
+        if child.data=="np" and len(child.children)==1 and child.children[0].data=="noun":
+            # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
+            t.children[index] = child.children[0]
+        if child.data=="noun" and len(child.children)==1 and isinstance(child.children[0], Tree) and child.children[0].data=="pronoun":
+            # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
+            t.children[index] = child.children[0]
+        if child.data=="advp" and len(child.children)==1 and isinstance(child.children[0], Tree) and child.children[0].data=="adverb":
+            # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
+            t.children[index] = child.children[0]
+        else:
+            [replace_node_verb(child) for child in t.children]
+    
+
 def find_meaning(t: Tree):
+    if isinstance(t, Token):
+        return
     if t.data in ["start", "sentence"]:
         return find_meaning(t.children[0])
     if t.data=="_ambig":
@@ -117,7 +142,8 @@ def find_meaning(t: Tree):
 
 def main(phrase):
     try:
-        parsed_phrase = simple_p.parse(phrase)
+        parsed_phrase = p.parse(phrase)
+        replace_node_verb(parsed_phrase)
     except Exception as e:
         print(e)
         print(list(WordLexer().lex(phrase)))
@@ -132,7 +158,10 @@ def main(phrase):
         print(list(meaning))
         print("End of meaning")
     print("plot: ")
-    print(plot(parsed_phrase))
+    #print(plot(parsed_phrase))
+    for x in CollapseAmbiguities().transform(parsed_phrase):
+        print(x.pretty())
+        input()
 
 if __name__=="__main__":
     phrase = sys.argv[1]
