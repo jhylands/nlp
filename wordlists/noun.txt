@@ -17608,6 +17608,7 @@ ibsen
 ibuprofen
 icarus
 ice
+ice-cream
 iceberg
 iceboat
 icebreaker
@@ -39048,6 +39049,7 @@ wheelwright
 wheeze
 wheeziness
 whelk
+where
 whereabouts
 wherewithal
 wherry

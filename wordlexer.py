@@ -6,12 +6,12 @@ WORDTYPES = ["determiner", "noun", "linkingverb", "verb", "conjunction", "adject
 worddir = path.join(path.dirname(__file__), "wordlists")
 
 
-def get_dictionary(word_type):
+def get_dictionary(word_type: str)->set:
     with open(path.join(worddir, word_type + ".txt"), "r") as f:
         return set([word.lower() for word in f.read().split("\n") if word!=""])
 
 
-def set_dictionary(word_type, dictionary):
+def set_dictionary(word_type: str, dictionary: set):
     with open(path.join(worddir, word_type + ".txt"), "w") as f:
         f.write("\n".join(sorted(dictionary)))
 
@@ -32,7 +32,7 @@ class WordLexer(Lexer):
         if not self.expand_vocab:
             return
         for word_type in WORDTYPES:
-            set_dictionary(self.dictionary[word_type])
+            set_dictionary(word_type, self.dictionary[word_type])
 
     def lexword(self, word):
         word = word.lower()

@@ -20,12 +20,12 @@ collision_grammar = '''
 start: sentence
 sentence: declarative_sentence | interrogative_sentence | imperative_sentence
 declarative_sentence: np vp
-pp: preposition+ np
+pp: preposition+ np vp
 sbar: conjunction sentence
 np: terminalnounphrase | np pp | np sbar | QUOTE WORD* QUOTE
 terminalnounphrase: determiner? adjp? noun
 vp: terminalvp | terminalvp np | vp pp | linkingverb adjp
-terminalvp: advp? verb+ advp?
+terminalvp: (advp | verb)+
 adjp: adjective+
 advp: adverb+
 imperative_sentence: vp np

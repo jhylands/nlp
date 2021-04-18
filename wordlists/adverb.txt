@@ -2652,6 +2652,7 @@ westward
 whacking
 wheezily
 whence
+where
 wherever
 wholeheartedly
 wholesale
