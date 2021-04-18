@@ -20,17 +20,16 @@ collision_grammar = '''
 start: sentence
 sentence: declarative_sentence | interrogative_sentence | imperative_sentence
 declarative_sentence: np vp
-pp: preposition+ np vp
-sbar: conjunction sentence
+pp: preposition+ np vp?
+sbar: sentence
 np: terminalnounphrase | np pp | np sbar | QUOTE WORD* QUOTE
 terminalnounphrase: determiner? adjp? noun
 vp: terminalvp | terminalvp np | vp pp | linkingverb adjp
-terminalvp: (advp | verb)+
+terminalvp: (adverb | verb)* verb (adverb | verb)*
 adjp: adjective+
-advp: adverb+
 imperative_sentence: vp np
 interrogative_sentence: qvp? np QUESTIONMARK
-qvp: advp? verb? adjp| verb vp
+qvp: terminalvp adjp | vp
 QUESTIONMARK: "?"
 QUOTE: "`"
 WORD: /[a-z]+/

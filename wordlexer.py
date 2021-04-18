@@ -25,7 +25,7 @@ def get_word_types(dictionary={}):
 
 class WordLexer(Lexer):
     def __init__(self, lexer_conf=None):
-        self.expand_vocab = True
+        self.expand_vocab = False
         self.dictionary = get_word_types()
 
     def save(self):

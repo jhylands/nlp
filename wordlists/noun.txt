@@ -16708,7 +16708,6 @@ hieratic
 hierocracy
 hieroglyph
 higginson
-high
 highball
 highbinder
 highboard
@@ -18652,6 +18651,7 @@ istiophoridae
 istiophorus
 isuridae
 isurus
+it
 italian
 italic
 italy
@@ -39664,6 +39664,7 @@ yoruba
 yosemite
 yottabit
 yottabyte
+you
 young
 youngness
 youngstown

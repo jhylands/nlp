@@ -1034,6 +1034,7 @@ combine
 combust
 come
 comfort
+coming
 command
 commandeer
 commemorate
@@ -2436,6 +2437,7 @@ gnaw
 go
 goad
 gobble
+goes
 goggle
 going
 goldplate
@@ -2971,6 +2973,7 @@ juggle
 julienne
 jumble
 jump
+jumped
 jumpstart
 junketeer
 justify
@@ -5093,6 +5096,7 @@ splay
 splice
 splint
 splinter
+splits
 splotch
 splurge
 splutter

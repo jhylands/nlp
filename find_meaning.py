@@ -115,36 +115,46 @@ def find_meaning(t: Tree):
         return
     if t.data in ["start", "sentence"]:
         return find_meaning(t.children[0])
-    if t.data=="_ambig":
-        return filter(lambda x:x is not None, [find_meaning(child) for child in t.children])
 
     if t.data=="declarative_sentence":
-        np1, vp = t.children
-        verbs, np2 = extract_nested_verbs(vp)
-        if verbs!=[]:
-            if np2 is None:
-                return Meaning(verb=verbs, subject = np1)
-            else:
-                return Meaning(verb=verbs, subject= np1, object=np2)
-        else:
-            print(plot(np1), plot(vp))
+        np, vp = t.children
+    elif t.data == "vp":
+        vp = t
+        if is_(vp, "vp terminalvp np"):
+            # That is saying that the terminal vp is being applied to
+            # t.children[0] and vp.children[1]
+            n1, v, n2
+            "( (n1)-[performing]->(v) )-[happening to]->(n2)"
+            pass
+        elif is_(vp, "vp terminalvp"):
+            # The noun is perform(ing)(obs tense) the verb
+            "(n1)-[performing]->(v)"
+            pass
+        elif is_(vp, "vp linkingverb adjp"):
+            # That means this adjective is being linked to the noun through the linking verb
+            "(n1)->[:linkingverb]->(adj)"
+            pass
+        elif is_(vp, "vp vp pp"):
             
-    elif is_(t, "np determiner noun"):
-        return AThing(*t.children)
-    else:
-        print(t.data)
-"""
-        
-        # vp decomposition
-            vp, np = vp.children
-            vp, pp = vp.children
-            advp, vp, advp = vp.children
-            verbs = vp.children
-        # np decomposition
-            determiner, adjp, noun
-            np pp
-            np sbar
-"""
+            # the pp is describing the vp
+            pass
+    elif t.data == "np":
+        np = t
+        if is_(np, "np np pp"):
+            # this is also adding extra information about the noun
+            pass
+        elif is_(np, "np np sbar"):
+            # this is adding extra information about the noun
+            pass
+        else:
+            # assuming the quote isn't implemented
+            raise Exception("NP meaning confused")
+    elif t.data == "terminalnounphrase":
+        # the meaning of this is pretty simple.
+        pass
+    
+            
+            
 
 def main(phrase):
     try:

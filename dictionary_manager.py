@@ -34,6 +34,8 @@ def main():
         dictionary = get_dictionary(namespace.dictionary)
         dictionary.discard(namespace.word)
         set_dictionary(namespace.dictionary, dictionary)
+    else:
+        parser.parse_args("--help")
         
 
 
