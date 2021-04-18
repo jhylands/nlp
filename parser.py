@@ -21,10 +21,11 @@ start: sentence
 sentence: declarative_sentence | interrogative_sentence | imperative_sentence
 declarative_sentence: np vp
 pp: preposition+ np
-sbar: sentence | conjunction sentence
+sbar: conjunction sentence
 np: terminalnounphrase | np pp | np sbar | QUOTE WORD* QUOTE
 terminalnounphrase: determiner? adjp? noun
-vp: advp? verb+ advp? | vp np | vp pp
+vp: terminalvp | terminalvp np | vp pp | linkingverb adjp
+terminalvp: advp? verb+ advp?
 adjp: adjective+
 advp: adverb+
 imperative_sentence: vp np
@@ -34,7 +35,7 @@ QUESTIONMARK: "?"
 QUOTE: "`"
 WORD: /[a-z]+/
 %ignore " "
-%import .ambiguous_word (determiner, noun, verb, pronoun, conjunction, adjective, adverb, preposition)
+%import .ambiguous_word (determiner, noun, linkingverb, verb, pronoun, conjunction, adjective, adverb, preposition)
 '''
 p = Lark(collision_grammar, parser='earley', ambiguity="explicit", lexer=WordLexer, import_paths=["."], debug=True)
 

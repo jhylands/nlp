@@ -2,15 +2,24 @@ from lark.lexer import Lexer, Token
 from os import path
 
 
-WORDTYPES = ["determiner", "noun", "verb", "pronoun", "conjunction", "adjective", "adverb", "preposition"]
+WORDTYPES = ["determiner", "noun", "linkingverb", "verb", "conjunction", "adjective", "adverb", "preposition"]
 worddir = path.join(path.dirname(__file__), "wordlists")
+
+
+def get_dictionary(word_type):
+    with open(path.join(worddir, word_type + ".txt"), "r") as f:
+        return set([word.lower() for word in f.read().split("\n") if word!=""])
+
+
+def set_dictionary(word_type, dictionary):
+    with open(path.join(worddir, word_type + ".txt"), "w") as f:
+        f.write("\n".join(sorted(dictionary)))
 
 
 def get_word_types(dictionary={}):
     if dictionary == {}:
         for word_type in WORDTYPES:
-            with open(path.join(worddir, word_type + ".txt"), "r") as f:
-                dictionary[word_type] = set([word.lower() for word in f.read().split("\n") if word!=""])
+            dictionary[word_type] = get_dictionary(word_type)
     return dictionary
 
 
@@ -23,15 +32,18 @@ class WordLexer(Lexer):
         if not self.expand_vocab:
             return
         for word_type in WORDTYPES:
-            with open(path.join(worddir, word_type + ".txt"), "w") as f:
-                f.write("\n".join(self.dictionary[word_type]))
+            set_dictionary(self.dictionary[word_type])
 
     def lexword(self, word):
         word = word.lower()
         token = ""
+        tokens = 0
         for word_type in WORDTYPES:
             if word in self.dictionary[word_type]:
                 token += word_type.upper()
+                tokens += 1
+        if tokens > 4:
+            token = "MANY"
 
         if token == "":
             if self.expand_vocab:
@@ -52,8 +64,8 @@ class WordLexer(Lexer):
             terminal = "."
         if "`" in phrase:
             raise Exception("Unimplemented quote based noun phrases")
-            
-        
+
+
         sentence = phrase.split(" ")
         for word in sentence:
             yield self.lexword(word)
@@ -61,7 +73,3 @@ class WordLexer(Lexer):
             yield Token("QUESTIONMARK", "?")
             
         self.save()
-
-if __name__=="__main__":
-    import sys
-    print(WordLexer().lexword(sys.argv[1]).__repr__())

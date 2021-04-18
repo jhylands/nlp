@@ -91,7 +91,13 @@ def replace_node_verb(t):
         if child.data=="vp" and len(child.children)==1 and child.children[0].data=="verb":
             # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
             t.children[index] = child.children[0]
+        if child.data=="vp" and len(child.children)==1 and child.children[0].data=="terminalverbphrase":
+            # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
+            t.children[index] = child.children[0]
         if child.data=="np" and len(child.children)==1 and child.children[0].data=="noun":
+            # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
+            t.children[index] = child.children[0]
+        if child.data=="np" and len(child.children)==1 and child.children[0].data=="terminalnounphrase":
             # so here it would be nice to replace t with t.children[0] but to do that we need a reference to t.
             t.children[index] = child.children[0]
         if child.data=="noun" and len(child.children)==1 and isinstance(child.children[0], Tree) and child.children[0].data=="pronoun":
