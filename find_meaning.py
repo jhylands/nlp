@@ -118,33 +118,32 @@ def find_meaning(t: Tree):
 
     if t.data=="declarative_sentence":
         np, vp = t.children
-    elif t.data == "vp":
-        vp = t
         if is_(vp, "vp terminalvp np"):
             # That is saying that the terminal vp is being applied to
             # t.children[0] and vp.children[1]
-            n1, v, n2
-            "( (n1)-[performing]->(v) )-[happening to]->(n2)"
-            pass
+            return "( ({n1})->(PERFORMING)->({v}) )-(happening_to)->({n2})"
         elif is_(vp, "vp terminalvp"):
             # The noun is perform(ing)(obs tense) the verb
-            "(n1)-[performing]->(v)"
-            pass
+            return "({n1})->(PERFORMING)->({v})"
         elif is_(vp, "vp linkingverb adjp"):
             # That means this adjective is being linked to the noun through the linking verb
-            "(n1)->[:linkingverb]->(adj)"
-            pass
+            return "({n1})->(linkingverb)->({adj})"
         elif is_(vp, "vp vp pp"):
-            
+            return "({vp})->({prepositional})->({preposition})"
             # the pp is describing the vp
             pass
+    elif t.data == "vp":
+        pass
     elif t.data == "np":
         np = t
         if is_(np, "np np pp"):
             # this is also adding extra information about the noun
-            pass
+            return "({np})->({prepositional})->({preposition})"
         elif is_(np, "np np sbar"):
             # this is adding extra information about the noun
+            pass
+        elif is_(np, "np terminalnounphrase"):
+            return "(noun) where noun -> adjective"
             pass
         else:
             # assuming the quote isn't implemented
@@ -152,9 +151,7 @@ def find_meaning(t: Tree):
     elif t.data == "terminalnounphrase":
         # the meaning of this is pretty simple.
         pass
-    
-            
-            
+
 
 def main(phrase):
     try:
